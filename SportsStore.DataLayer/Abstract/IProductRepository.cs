@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SportsStore.DataLayer.Abstract
 {
-    interface IProductRepository
+    public interface IProductRepository
     {
     }
 }
