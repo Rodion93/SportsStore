@@ -11,8 +11,8 @@ namespace SportsStore.DataLayer.Implementations
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class 
     {
-        readonly DbContext _context;
-        readonly DbSet<TEntity> _dbSet;
+        private readonly DbContext _context;
+        private readonly DbSet<TEntity> _dbSet;
 
         public GenericRepository(DbContext context)
         {
@@ -30,7 +30,7 @@ namespace SportsStore.DataLayer.Implementations
             return _dbSet.AsNoTracking().Where(predicate).ToList();
         }
 
-        public TEntity FindById(int id)
+        public TEntity FindById(Guid id)
         {
             return _dbSet.Find(id);
         }
@@ -38,19 +38,21 @@ namespace SportsStore.DataLayer.Implementations
         public void Create(TEntity item)
         {
             _dbSet.Add(item);
-            _context.SaveChanges();
         }
 
         public void Update(TEntity item)
         {
             _context.Entry(item).State = EntityState.Modified;
-            _context.SaveChanges();
         }
 
-        public void Remove(TEntity item)
+        public void Remove(Guid itemId)
         {
-            _dbSet.Remove(item);
-            _context.SaveChanges();
+            var item = _dbSet.Find(itemId);
+
+            if (item != null)
+            {
+                _dbSet.Remove(item);
+            }
         }
 
         public IEnumerable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties)

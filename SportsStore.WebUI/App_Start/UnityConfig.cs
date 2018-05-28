@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Moq;
 using SportsStore.DataLayer.Abstract;
 using SportsStore.DataLayer.Entities;
+using SportsStore.DataLayer.Implementations;
 using Unity;
 
 namespace SportsStore.WebUI
@@ -39,15 +40,7 @@ namespace SportsStore.WebUI
         /// </remarks>
         public static void RegisterTypes(IUnityContainer container)
         {
-            Mock<IProductRepository> mock = new Mock<IProductRepository>();
-            mock.Setup(m => m.Products).Returns(new List<Product>
-            {
-                new Product {Name = "Football", Price = 25},
-                new Product {Name = "Surf board", Price = 179},
-                new Product {Name = "Runnign shoes", Price = 95}
-            });
-            object mocking = mock.Object;
-            container.RegisterType<IProductRepository>();
+            container.RegisterType<IUnitOfWork, UnitOfWork>();
 
             // NOTE: To load from web.config uncomment the line below.
             // Make sure to add a Unity.Configuration to the using statements.
